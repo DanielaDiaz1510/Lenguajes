@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8"> <!-- Corregí: "utf-t" → "utf-8" -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tienda Fake - Proyecto Final</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>Simulador de tienda</h1>
+      <div class="header-actions"> <!-- Nuevo contenedor -->
+        <div class="auth">
+          <div id="login-status">No has iniciado sesión</div>
+          <button id="login-btn">Iniciar sesión</button>
+          <button id="logout" style="display:none">Cerrar sesión</button>
+        </div>
+        <!-- Botón de modo oscuro -->
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema claro/oscuro">
+          <span class="sun-icon">☀️</span>
+          <span class="moon-icon">🌙</span>
+        </button>
+      </div>
+    </header>
+ 
+    <main class="layout">
+      <section id="catalogo-productos" class="catalogo" aria-label="Catálogo de productos">
+      </section>
+ 
+      <div id="loading" class="loading" aria-live="polite" style="display:none">Cargando productos…</div>
+ 
+      <aside id="carrito" class="carrito" aria-label="Carrito de compras">
+        <h2>Carrito</h2>
+        <div id="carrito-items">El carrito está vacío</div>
+        <div id="carrito-total"></div>
+        <div style="margin-top:0.75rem;display:flex;gap:0.5rem;justify-content:flex-end">
+          <button id="vaciar-carrito" class="empty-btn">Vaciar carrito</button>
+        </div>
+      </aside>
+    </main>
+ 
+    <footer class="site-footer">
+      <p>Proyecto de tienda - API: <a href="https://dummyjson.com/products">Dummyjson API</a></p>
+    </footer>
+ 
+    <div id="modal-overlay" class="modal-overlay">
+      <div class="modal-content">
+        <h2>Iniciar Sesión / Registro</h2>
+        <p>Como esto es una simulación, puedes usar cualquier dato.</p>
+       
+        <form id="login-form">
+          <div class="form-group">
+            <label for="nombre">Tu Nombre:</label>
+            <input type="text" id="nombre" placeholder="Ej: Harry Potter" required />
+          </div>
+ 
+          <div class="form-group">
+            <label for="email">Tu Email:</label>
+            <input type="email" id="email" placeholder="harrypotter@gmail.com" required />
+          </div>
+ 
+          <div class="form-group">
+            <label for="password">Tu Contraseña:</label>
+            <input type="password" id="password" placeholder="Alohomora" required />
+          </div>
+ 
+          <button type="submit">Entrar</button>
+        </form>
+ 
+        <button id="modal-close" class="modal-close-btn">&times;</button>
+      </div>
+    </div>
+ 
+    <script src="app.js" defer></script>
+    <div id="toast" aria-live="polite"></div>
+  </body>
+</html>
