@@ -1,4 +1,5 @@
 const API_URL = 'https://dummyjson.com/products';
+const AUTH_LOGIN_URL = 'https://dummyjson.com/auth/login';
 
 const estado = {
   productos: [],
@@ -113,8 +114,6 @@ async function fetchProductos() {
 }
 
 function generarDescripcionPersonalizada(p) {
-  // Nota: dummyjson.com devuelve `category` como string, no como objeto
-  // Así que usamos directamente `p.category`
   return `¡Descubre ${p.title.split(' ')[0]}! Producto de la categoría ${p.category}. Calidad garantizada.`;
 }
 
@@ -152,6 +151,22 @@ function updateAddButtons() {
   document.querySelectorAll('#catalogo-productos button').forEach(b => b.disabled = !isLogged);
 }
 
+// Función login con DummyJSON
+async function loginConApi(email, password) {
+  const res = await fetch(AUTH_LOGIN_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || 'Credenciales inválidas');
+  }
+
+  return await res.json(); 
+}
+
 function setupAuth() {
   const modalOverlay = document.getElementById('modal-overlay');
   const loginModalBtn = document.getElementById('login-btn');
@@ -185,32 +200,39 @@ function setupAuth() {
     loginModalBtn.style.display = 'none';
     logoutBtn.style.display = 'inline-block';
   } else {
+    status.innerText = 'No has iniciado sesión';
     loginModalBtn.style.display = 'inline-block';
     logoutBtn.style.display = 'none';
   }
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const nombre = document.getElementById('nombre').value;
-    const email = document.getElementById('email').value;
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
-    if (!email || !password || !nombre) {
-      showToast('Por favor completa todos los campos', 'error');
+    if (!email || !password) {
+      showToast('Email y contraseña son obligatorios', 'error');
       return;
     }
 
-    const fakeToken = btoa(email + nombre);
-    localStorage.setItem('token', fakeToken);
-    localStorage.setItem('user_email', email);
-    localStorage.setItem('user_name', nombre);
+    try {
+      // Login
+      const userData = await loginConApi(email, password);
 
-    status.innerText = `Conectado: ${nombre}`;
-    loginModalBtn.style.display = 'none';
-    logoutBtn.style.display = 'inline-block';
-    updateAddButtons();
-    modalOverlay.classList.remove('visible');
-    showToast(`¡Bienvenido, ${nombre}!`, 'success');
+      localStorage.setItem('token', userData.token);
+      localStorage.setItem('user_name', userData.firstName + ' ' + userData.lastName);
+      localStorage.setItem('user_email', userData.email);
+
+      status.innerText = `Conectado: ${userData.firstName}`;
+      loginModalBtn.style.display = 'none';
+      logoutBtn.style.display = 'inline-block';
+      updateAddButtons();
+      modalOverlay.classList.remove('visible');
+      showToast(`¡Bienvenido, ${userData.firstName}!`, 'success');
+    } catch (err) {
+      console.error('Error de login:', err);
+      showToast(err.message || 'Error al iniciar sesión', 'error');
+    }
   });
 
   logoutBtn.addEventListener('click', () => {
@@ -268,7 +290,7 @@ function showToast(message, type = 'success', timeout = 3000) {
   setTimeout(() => { node.remove(); }, timeout);
 }
 
-// ✅ Inicialización principal — con modo oscuro al final
+// Inicialización principal
 document.addEventListener('DOMContentLoaded', () => {
   carrito.load();
   fetchProductos();
@@ -277,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
   carrito.renderizarCarrito();
   updateAddButtons();
 
-  // --- ✨ Modo oscuro/claro — AHORA SÍ, después de que el DOM esté listo ---
+  // Modo oscuro
   const themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) {
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
