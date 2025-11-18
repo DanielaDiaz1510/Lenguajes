@@ -151,12 +151,17 @@ function updateAddButtons() {
   document.querySelectorAll('#catalogo-productos button').forEach(b => b.disabled = !isLogged);
 }
 
-// Función login con DummyJSON
-async function loginConApi(email, password) {
+// 
+async function loginConApi(username, password) {
+  // 🔍 LOGS DE DEPURACIÓN - Ver qué se envía realmente
+  console.log("🔍 Usuario enviado:", JSON.stringify(username));
+  console.log("🔐 Contraseña enviada:", JSON.stringify(password));
+  console.log("📦 Body final:", JSON.stringify({ username, password }));
+
   const res = await fetch(AUTH_LOGIN_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ username, password })
   });
 
   if (!res.ok) {
@@ -207,17 +212,19 @@ function setupAuth() {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
+  
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
 
-    if (!email || !password) {
-      showToast('Email y contraseña son obligatorios', 'error');
+  
+    if (!username || !password) {
+      showToast('Nombre de usuario y contraseña son obligatorios', 'error');
       return;
     }
 
     try {
-      // Login
-      const userData = await loginConApi(email, password);
+      
+      const userData = await loginConApi(username, password);
 
       localStorage.setItem('token', userData.token);
       localStorage.setItem('user_name', userData.firstName + ' ' + userData.lastName);
