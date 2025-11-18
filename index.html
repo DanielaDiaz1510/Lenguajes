@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es">
   <head>
-    <meta charset="utf-8"> <!-- Corregí: "utf-t" → "utf-8" -->
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tienda Fake - Proyecto Final</title>
     <link rel="stylesheet" href="style.css">
@@ -9,13 +9,12 @@
   <body>
     <header class="site-header">
       <h1>Simulador de tienda</h1>
-      <div class="header-actions"> <!-- Nuevo contenedor -->
+      <div class="header-actions">
         <div class="auth">
           <div id="login-status">No has iniciado sesión</div>
           <button id="login-btn">Iniciar sesión</button>
           <button id="logout" style="display:none">Cerrar sesión</button>
         </div>
-        <!-- Botón de modo oscuro -->
         <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema claro/oscuro">
           <span class="sun-icon">☀️</span>
           <span class="moon-icon">🌙</span>
@@ -45,26 +44,25 @@
  
     <div id="modal-overlay" class="modal-overlay">
       <div class="modal-content">
-        <h2>Iniciar Sesión / Registro</h2>
-        <p>Como esto es una simulación, puedes usar cualquier dato.</p>
+        <h2>Iniciar Sesión</h2>
+        <p>Usa credenciales de prueba de DummyJSON:</p>
+        <ul style="font-size:0.9em;margin:0.5rem 0;">
+          <li><strong>Email:</strong> kminchelle@gmail.com | <strong>Contraseña:</strong> 0lelplR</li>
+          <li><strong>Email:</strong> johnd@gmail.com | <strong>Contraseña:</strong> m38rmF$</li>
+        </ul>
        
         <form id="login-form">
           <div class="form-group">
-            <label for="nombre">Tu Nombre:</label>
-            <input type="text" id="nombre" placeholder="Ej: Harry Potter" required />
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="kminchelle@gmail.com" required />
           </div>
  
           <div class="form-group">
-            <label for="email">Tu Email:</label>
-            <input type="email" id="email" placeholder="harrypotter@gmail.com" required />
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" placeholder="0lelplR" required />
           </div>
  
-          <div class="form-group">
-            <label for="password">Tu Contraseña:</label>
-            <input type="password" id="password" placeholder="Alohomora" required />
-          </div>
- 
-          <button type="submit">Entrar</button>
+          <button type="submit">Iniciar sesión</button>
         </form>
  
         <button id="modal-close" class="modal-close-btn">&times;</button>
