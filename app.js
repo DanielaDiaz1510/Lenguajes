@@ -151,25 +151,33 @@ function updateAddButtons() {
   document.querySelectorAll('#catalogo-productos button').forEach(b => b.disabled = !isLogged);
 }
 
-// 
+// ✅ CORREGIDO: Manejo robusto de errores
 async function loginConApi(username, password) {
-  // 🔍 LOGS DE DEPURACIÓN - Ver qué se envía realmente
-  console.log("🔍 Usuario enviado:", JSON.stringify(username));
-  console.log("🔐 Contraseña enviada:", JSON.stringify(password));
-  console.log("📦 Body final:", JSON.stringify({ username, password }));
+  console.log("🔍 Enviando login:", { username, password });
 
-  const res = await fetch(AUTH_LOGIN_URL, {
+  const response = await fetch(AUTH_LOGIN_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({ username, password })
   });
 
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || 'Credenciales inválidas');
+  // Si la respuesta es JSON, lo parseamos
+  let data;
+  try {
+    data = await response.json();
+  } catch (e) {
+    // Si no es JSON, lanzamos un error genérico
+    throw new Error('Error en el servidor de autenticación');
   }
 
-  return await res.json(); 
+  if (!response.ok) {
+    // DummyJSON a veces no devuelve "message", así que usamos fallback
+    throw new Error(data.message || data.error || 'Credenciales inválidas');
+  }
+
+  return data;
 }
 
 function setupAuth() {
@@ -212,18 +220,25 @@ function setupAuth() {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-  
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
+    
+    // ✅ Verificación de existencia de elementos
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    
+    if (!usernameInput || !passwordInput) {
+      showToast('Error: formulario incompleto', 'error');
+      return;
+    }
 
-  
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
     if (!username || !password) {
       showToast('Nombre de usuario y contraseña son obligatorios', 'error');
       return;
     }
 
     try {
-      
       const userData = await loginConApi(username, password);
 
       localStorage.setItem('token', userData.token);
