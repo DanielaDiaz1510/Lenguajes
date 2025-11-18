@@ -191,7 +191,7 @@ body.dark-mode .empty-btn:hover {
   border-color: #666;
 }
 
-/* --- Layout Principal --- */
+/*Layout Principal */
 .layout {
   display: grid;
   grid-template-columns: 1fr 340px;
@@ -201,7 +201,7 @@ body.dark-mode .empty-btn:hover {
   margin: 0 auto;
 }
 
-/* --- Catálogo de Productos --- */
+/* Catálogo de Productos */
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -295,7 +295,7 @@ body.dark-mode .product-card button:disabled {
   color: #999;
 }
 
-/* --- Carrito --- */
+/* Carrito */
 .carrito {
   background: var(--card);
   padding: 1.5rem;
@@ -397,7 +397,7 @@ body.dark-mode .carrito-item .qty {
   border-top: 2px solid var(--text-dark);
 }
 
-/* --- Footer --- */
+/*Footer */
 .site-footer {
   padding: 2rem;
   text-align: center;
@@ -419,7 +419,7 @@ body.dark-mode .site-footer {
   text-decoration: underline;
 }
 
-/* --- Toast (Notificación) --- */
+/* Toast (Notificación) */
 #toast {
   position: fixed;
   right: 1.5rem;
@@ -464,7 +464,7 @@ body.dark-mode .toast {
   }
 }
 
-/* --- Indicador de Carga --- */
+/* Indicador de Carga */
 .loading {
   grid-column: 1 / -1;
   display: flex;
@@ -505,7 +505,7 @@ body.dark-mode .loading:before {
   }
 }
 
-/* --- Responsividad --- */
+/*  Responsividad  */
 @media (max-width: 900px) {
   .layout {
     grid-template-columns: 1fr;
@@ -545,7 +545,7 @@ body.dark-mode .loading:before {
   }
 }
 
-/* --- Estilos del Modal de Login --- */
+/* Estilos del Modal de Login */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -576,6 +576,26 @@ body.dark-mode .loading:before {
 .modal-content h2 {
   margin-top: 0;
   color: var(--accent);
+}
+
+/* Estilos para la lista de credenciales de prueba */
+.modal-content ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.5em 0;
+  line-height: 1.4;
+  font-size: 0.9em;
+  color: var(--text-light);
+}
+.modal-content li {
+  margin-bottom: 0.3em;
+}
+.modal-content ul strong {
+  color: var(--text-dark);
+}
+
+body.dark-mode .modal-content ul strong {
+  color: var(--text-dark);
 }
 
 .modal-content .modal-close-btn {
