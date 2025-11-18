@@ -151,7 +151,7 @@ function updateAddButtons() {
   document.querySelectorAll('#catalogo-productos button').forEach(b => b.disabled = !isLogged);
 }
 
-// ✅ CORREGIDO: Manejo robusto de errores
+
 async function loginConApi(username, password) {
   console.log("🔍 Enviando login:", { username, password });
 
@@ -163,17 +163,17 @@ async function loginConApi(username, password) {
     body: JSON.stringify({ username, password })
   });
 
-  // Si la respuesta es JSON, lo parseamos
+  
   let data;
   try {
     data = await response.json();
   } catch (e) {
-    // Si no es JSON, lanzamos un error genérico
+   
     throw new Error('Error en el servidor de autenticación');
   }
 
   if (!response.ok) {
-    // DummyJSON a veces no devuelve "message", así que usamos fallback
+  
     throw new Error(data.message || data.error || 'Credenciales inválidas');
   }
 
@@ -221,7 +221,7 @@ function setupAuth() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // ✅ Verificación de existencia de elementos
+    
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     
@@ -312,7 +312,7 @@ function showToast(message, type = 'success', timeout = 3000) {
   setTimeout(() => { node.remove(); }, timeout);
 }
 
-// Inicialización principal
+
 document.addEventListener('DOMContentLoaded', () => {
   carrito.load();
   fetchProductos();
